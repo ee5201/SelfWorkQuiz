@@ -4,6 +4,7 @@ import swaggerJSDoc from "swagger-jsdoc";
 import {options }from "./swagger/config.js"
 import cors from "cors"
 import { checkValidationPhone, getTokentophone, sendTokenToPhone } from "./phone.js";
+import { CheckValidationEmail, getTempletEmail, sendTOEmailTOsms } from "./email.js";
 
 
 const app = express()
@@ -79,6 +80,17 @@ app.post("/token/phone",(req,res)=>{
     sendTokenToPhone(myphone,getToken)
 
   }
+})
+app.post("/user/email",(req,res)=>{
+const useremail = req.body.myuser
+const isVaildEmail = CheckValidationEmail(useremail.email)
+if(isVaildEmail){
+  const Templet = getTempletEmail(useremail)
+
+  sendTOEmailTOsms(useremail.email,Templet)
+  res.send("가입완료")
+}
+
 })
 app.listen(3000,()=>{
   console.log(`Example app listening on port ${3000}`)
